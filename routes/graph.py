@@ -29,16 +29,15 @@ def list():
 
 def bou():
     
-    labels = ['1', '10', '20', '30', '40']
+    labels = ['10代以下','20代','30代','40代','50代以上']
     means = [20, 34, 30, 35, 27]
-    x = np.arange(len(labels))
     width = 0.35
 
     
     # グラフ描画
     fig = Figure()
     ax = fig.subplots()
-    ax.bar(x - width/2, means, width, label='A')
+    ax.bar(labels, means, width)
     
     # 画像をバッファに保存
     buf = BytesIO()
