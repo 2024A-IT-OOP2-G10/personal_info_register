@@ -10,10 +10,9 @@
     <p>以下の画像を表示する：</p>
     
     <!-- 画像を繰り返し表示 -->
-    <div class="image-gallery">
-      {% for image in images %}
-        <img src="{{ url_for('static', filename=image.split('static/')[1]) }}" alt="Image" />
-      {% endfor %}
+    <div>
+      <img src = "data:image/png:base64,{{bou}}" />
+      <img src = "data:image/png:base64,{{enn}}" />
     </div>
     
     <br>
