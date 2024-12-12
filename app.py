@@ -28,7 +28,7 @@ def index():
 def dashboard():
     # 画像のフルパスをリストにして渡す
     image_paths = [os.path.join(IMAGE_FOLDER, img) for img in images]
-    return render_template('dashboard.html', images=image_paths)
+    return render_template('graph.html', images=image_paths)
 
 if __name__ == '__main__':
     app.run(port=8080, debug=True)
