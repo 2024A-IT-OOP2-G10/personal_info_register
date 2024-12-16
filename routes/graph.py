@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for # type: ignore
 from datetime import datetime
-from models import User
 import sqlite3
 import collections
 import numpy as np
@@ -81,6 +80,7 @@ def bou():
    
     user = [user1, user10, user20, user30, user40, user50, user60, user70, user80, user90, user100]
     label = ['10歳未満', '10代', '20代', '30代', '40代', '50代', '60代', '70代', '80代', '90代', '100歳以上']
+    
     width = 0.35
 
     
