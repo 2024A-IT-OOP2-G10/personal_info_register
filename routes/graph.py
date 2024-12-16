@@ -47,10 +47,45 @@ def list():
     cur.close()
     con.close()
     
+    # 棒グラフの画像を取得
+    bouData = bou()
     
-    count_tag_list = [10, 20, 30, 40, 50]
-    
+    dbFile = 'my_database.db'
+    # データベースに接続
+    con = sqlite3.connect(dbFile)
+
+    # sqliteを操作するカーソルオブジェクトを作成
+    cur = con.cursor()
+
+    # テーブルの全データを取得
+    cur.execute('SELECT tag_id FROM article')
+    rows = cur.fetchall()
+
+    # 取得したデータを配列に入れるために配列作り
+    Change_array = []
+
+    # 取得したデータを配列化
+    for row in rows:
+        n = row[0]
+        print(n)
+        Change_array.append(n)
+
+    # カウント用のラベル
     labels = ['Python', 'Ruby', 'Java', 'PHP', 'JavaScript']
+
+    # 各ラベルを 0 で初期化
+    Count_tag = collections.Counter({label: 0 for label in labels})
+
+    # 実際のカウントを追加
+    Count_tag.update(Change_array)
+
+    # dict_values をリストに変換
+    count_tag_list = [Count_tag[label] for label in labels]
+
+    # データベースの接続を切断
+    cur.close()
+    con.close()
+    
     plt.pie(count_tag_list, labels=labels, autopct='%.f%%', labeldistance=None)
     plt.legend()
     plt.title('Language')
@@ -80,7 +115,6 @@ def bou():
    
     user = [user1, user10, user20, user30, user40, user50, user60, user70, user80, user90, user100]
     label = ['10歳未満', '10代', '20代', '30代', '40代', '50代', '60代', '70代', '80代', '90代', '100歳以上']
-    
     width = 0.35
 
     
