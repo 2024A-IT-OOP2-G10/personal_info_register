@@ -69,9 +69,18 @@ def bou():
     user1 = User.select().where(User.age >= 10).count()
     user10 = User.select().where(User.age >= 10, User.age < 20).count()
     user20 = User.select().where(User.age >= 20, User.age < 30).count()
-    user = [user1, user10, user20]
-    label = ['10歳未満', '10代', '20代', '30代', '40代', '50代', '60代', '70代', '80代', '90代', '100歳以上']
+    user30 = User.select().where(User.age >= 30, User.age < 40).count()
+    user40 = User.select().where(User.age >= 40, User.age < 50).count()
+    user50 = User.select().where(User.age >= 50, User.age < 60).count()
+    user60 = User.select().where(User.age >= 60, User.age < 70).count()
+    user70 = User.select().where(User.age >= 70, User.age < 80).count()
+    user80 = User.select().where(User.age >= 80, User.age < 90).count()
+    user90 = User.select().where(User.age >= 90, User.age < 100).count()
+    user100 = User.select().where(User.age >= 100, User.age < 10000000).count()
    
+    user = [user1, user10, user20, user30, user40, user50, user60, user70, user80, user90, user100]
+    label = ['10歳未満', '10代', '20代', '30代', '40代', '50代', '60代', '70代', '80代', '90代', '100歳以上']
+    
     width = 0.35
 
     
