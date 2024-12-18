@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for # type: ignore
 from datetime import datetime
-from user import User
+from models import Article, Tag, User
 import sqlite3
 import collections
 import numpy as np
@@ -14,91 +14,51 @@ graph_bp = Blueprint('graph', __name__, url_prefix='/graph')
 
 @graph_bp.route('/')
 def list():
+    # 円グラフの画像を取得
+    ennData = enn()
+
     
     # 棒グラフの画像を取得
     bouData = bou()
-    
-    dbFile = 'my_database.db'
-    # データベースに接続
-    con = sqlite3.connect(dbFile)
 
-    # sqliteを操作するカーソルオブジェクトを作成
-    cur = con.cursor()
-
-    # テーブルの全データを取得
-    cur.execute('SELECT tag_id FROM article')
-    rows = cur.fetchall()
-
-    # 取得したデータを配列に入れるために配列作り
-    Change_array = []
-
-    # 取得したデータを配列化
-    for row in rows:
-        n = row[0]
-        print(n)
-        Change_array.append(n)
-
-    # 配列をdict_valuesに変換
-    Count_tag = collections.Counter(Change_array)
-
-    # dict_values をリストに変換
-    count_tag_list = list(Count_tag.values())
-
-    # データベースの接続を切断
-    cur.close()
-    con.close()
-    
-    # 棒グラフの画像を取得
-    bouData = bou()
-    
-    dbFile = 'my_database.db'
-    # データベースに接続
-    con = sqlite3.connect(dbFile)
-
-    # sqliteを操作するカーソルオブジェクトを作成
-    cur = con.cursor()
-
-    # テーブルの全データを取得
-    cur.execute('SELECT tag_id FROM article')
-    rows = cur.fetchall()
-
-    # 取得したデータを配列に入れるために配列作り
-    Change_array = []
-
-    # 取得したデータを配列化
-    for row in rows:
-        n = row[0]
-        print(n)
-        Change_array.append(n)
-
-    # カウント用のラベル
-    labels = ['Python', 'Ruby', 'Java', 'PHP', 'JavaScript']
-
-    # 各ラベルを 0 で初期化
-    Count_tag = collections.Counter({label: 0 for label in labels})
-
-    # 実際のカウントを追加
-    Count_tag.update(Change_array)
-
-    # dict_values をリストに変換
-    count_tag_list = [Count_tag[label] for label in labels]
-
-    # データベースの接続を切断
-    cur.close()
-    con.close()
-    
-    plt.pie(count_tag_list, labels=labels, autopct='%.f%%', labeldistance=None)
-    plt.legend()
-    plt.title('Language')
-    
-    buf = BytesIO()
-    plt.savefig(buf, format="png")
-    
-    #画像データをBase64にエンコード
-    data = base64.b64encode(buf.getbuffer()).decode("ascii")
-    
     #エンコードしたデータをHTMLに渡す
-    return render_template('graph.html', enn=data,bou=bouData)
+    return render_template('graph.html',ennData=ennData,bouData=bouData)
+
+
+def enn():
+    tag = Tag.select()  
+    
+    # tagそれぞれの記事数を取得
+    Pyhon = Article.select().where(Article.tag == 1).count()
+    Ruby = Article.select().where(Article.tag == 2).count()
+    Java = Article.select().where(Article.tag == 3).count()
+    PHP = Article.select().where(Article.tag == 4).count()
+    JavaScript = Article.select().where(Article.tag == 5).count()
+    
+    
+    tag = [Pyhon, Ruby, Java, PHP, JavaScript]
+    labels = ['Python', 'Ruby', 'Java', 'PHP', 'JavaScript']
+    
+    # グラフ描画
+    fig = Figure()
+    ax = fig.subplots()
+    ax.pie(tag, labels=labels, autopct='%.f%%', labeldistance=None)
+    ax.legend()
+    ax.set_title('Language')
+
+    # 画像をバッファに保存
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    buf.seek(0)  # バッファのポインタを先頭に戻す
+    
+    # 画像データをBase64にエンコード
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    buf.close()  # バッファを閉じる
+    
+    # エンコードしたデータを返す
+    return data
+    
+    
 
 def bou():
     user = User.select
@@ -122,7 +82,7 @@ def bou():
     # グラフ描画
     fig = Figure()
     ax = fig.subplots()
-    ax.bar(labels, user, width)
+    ax.bar(label, user, width)
     
     # 画像をバッファに保存
     buf = BytesIO()
@@ -132,6 +92,9 @@ def bou():
     # 画像データをBase64にエンコード
     data = base64.b64encode(buf.getbuffer()).decode("ascii")
     buf.close()  # バッファを閉じる
+    
+    # dataを出力
+    print("BouData:"+data)
 
 #エンコードしたデータを返す
     return  data

@@ -3,19 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <title>ダッシュボード</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='base-style.css') }}"
+    />
   </head>
   <body>
     <h1>ダッシュボード</h1>
-    <p>以下の画像を表示する：</p>
-    
+
     <!-- 画像を繰り返し表示 -->
     <div>
-      <img src = "data:image/png:base64,{{bou}}" />
-      <img src = "data:image/png:base64,{{enn}}" />
+      <img src="data:image/png;base64,{{bouData}}" />
+      <img src="data:image/png;base64,{{ennData}}" />
     </div>
-    
-    <br>
+
+    <br />
     <a href="{{ url_for('index') }}">戻る</a>
   </body>
 </html>
