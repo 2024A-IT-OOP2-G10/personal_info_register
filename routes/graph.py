@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for # type: ignore
 from datetime import datetime
+from user import User
 import sqlite3
 import collections
 import numpy as np
